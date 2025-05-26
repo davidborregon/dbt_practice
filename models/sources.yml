@@ -1,0 +1,15 @@
+version: 2
+
+sources:
+  - name: tpch_sf1
+    database: analytics
+    schema: dbt_practice
+    tables:
+      - name: customer
+      - name: orders
+      - name: lineitem
+      - name: part
+      - name: supplier
+      - name: nation
+      - name: region
+      - name: partsupp

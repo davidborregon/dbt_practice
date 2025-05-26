@@ -1,0 +1,143 @@
+
+version: 2
+
+models:
+    - name: stg_customer
+      description: "Every row represents a customer"
+      columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null
+          - name: country_id
+            description: "Customer nationality (foreign key to nation table)"
+            tests:
+              - relationships:
+                  to: ref('stg_nation')
+                  field: id
+          - name: account_balance
+          - name: market_segment
+            tests:
+              - accepted_values:
+                  values: ['BUILDING', 'HOUSEHOLD', 'MACHINERY', 'AUTOMOBILE', 'FURNITURE']
+
+
+    - name: stg_orders
+      description: "Every row represents an order"
+      columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null
+          - name: customer_id
+            tests:
+              - relationships:
+                  to: ref('stg_customer')
+                  field: id
+          - name: order_status
+            tests:
+              - accepted_values:
+                  values: ['O', 'F', 'P']
+          - name: total_price
+          - name: order_date
+
+    - name: lineitem
+      description: "Order line items"
+      columns:
+        - name: order_id
+          tests:
+            - relationships:
+                to: ref('stg_orders')
+                field: id
+        - name: part_id
+          tests:
+            - relationships:
+                to: ref('stg_part')
+                field: id
+        - name: supplier_id
+          tests:
+            - relationships:
+                to: ref('stg_supplier')
+                field: id
+        - name: line_number
+          tests:
+            - not_null
+        - name: quantity
+        - name: extended_price
+        - name: discount
+        - name: tax
+        - name: returned
+          tests:
+            - accepted_values:
+                values: ['O', 'F']
+        - name: returned
+          tests:
+            - accepted_values:
+                values: ['R', 'N', 'A']
+
+    - name: supplier
+      description: "Every row represents a supplier"
+      columns:
+        - name: id
+          tests:
+            - unique
+            - not_null
+        - name: country_id
+          tests:
+            - relationships:
+                to: ref('stg_nation')
+                field: id
+        - name: account_balance
+
+    - name: part
+      description: "Product parts"
+      columns:
+        - name: id
+          tests:
+            - unique
+            - not_null
+        - name: manufacturer
+        - name: brand
+    
+    - name: partsupp
+      description: "Part-Supplier relationship"
+      columns:
+        - name: part_id
+          tests:
+            - relationships:
+                to: ref('stg_part')
+                field: id
+        - name: supplier_id
+          tests:
+            - relationships:
+                to: ref('stg_supplied')
+                field: id
+        
+    - name: nation
+      description: "Countries"
+      columns:
+        - name: id
+          tests:
+            - unique
+            - not_null
+        - name: name
+          tests:
+            - not_null
+        - name: region_id
+          tests:
+            - relationships:
+                to: ref('stg_region')
+                field: id
+
+    - name: region
+      description: "Geographical regions"
+      columns:
+        - name: id
+          tests:
+            - unique
+            - not_null
+        - name: name
+          tests:
+            - not_null
