@@ -9,5 +9,6 @@ select
     l_tax as tax, -- 0.08 for 8% tax
     l_returnflag as returned, -- replace R with 'yes' and N with 'no'
     l_linestatus as status, -- replace O with 'open' and F with 'finalized'
+    l_shipdate as ship_date
 from
     {{ source('tpch_sf1', 'lineitem') }}
