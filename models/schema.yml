@@ -1,143 +1,222 @@
-
 version: 2
 
 models:
-    - name: stg_customer
-      description: "Every row represents a customer"
-      columns:
-          - name: id
-            description: "The primary key for this table"
-            tests:
-                - unique
-                - not_null
-          - name: country_id
-            description: "Customer nationality (foreign key to nation table)"
-            tests:
-              - relationships:
-                  to: ref('stg_nation')
-                  field: id
-          - name: account_balance
-          - name: market_segment
-            tests:
-              - accepted_values:
-                  values: ['BUILDING', 'HOUSEHOLD', 'MACHINERY', 'AUTOMOBILE', 'FURNITURE']
+  - name: stg_customer
+    description: "Every row represents a customer"
+    columns:
+      - name: customer_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: customer_name
+      - name: country_id
+        description: "Customer nationality (foreign key to nation table)"
+        tests:
+          - relationships:
+              to: ref('stg_nation')
+              field: country_id
+      - name: phone_number
+      - name: account_balance
+      - name: market_segment
+        tests:
+          - accepted_values:
+              values:
+                [
+                  "BUILDING",
+                  "HOUSEHOLD",
+                  "MACHINERY",
+                  "AUTOMOBILE",
+                  "FURNITURE",
+                ]
 
+  - name: stg_orders
+    description: "Every row represents an order"
+    columns:
+      - name: order_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        tests:
+          - relationships:
+              to: ref('stg_customer')
+              field: customer_id
+      - name: order_status
+        tests:
+          - accepted_values:
+              values: ["O", "F", "P"]
+      - name: total_price
+        tests:
+          - positive_values
+      - name: order_date
+      - name: order_priority
+      - name: clerk_id
+      - name: ship_priority
 
-    - name: stg_orders
-      description: "Every row represents an order"
-      columns:
-          - name: id
-            description: "The primary key for this table"
-            tests:
-                - unique
-                - not_null
-          - name: customer_id
-            tests:
-              - relationships:
-                  to: ref('stg_customer')
-                  field: id
-          - name: order_status
-            tests:
-              - accepted_values:
-                  values: ['O', 'F', 'P']
-          - name: total_price
-          - name: order_date
+  - name: stg_lineitem
+    description: "Order line items"
+    columns:
+      - name: order_id
+        tests:
+          - relationships:
+              to: ref('stg_orders')
+              field: order_id
+      - name: part_id
+        tests:
+          - relationships:
+              to: ref('stg_part')
+              field: part_id
+      - name: supplier_id
+        tests:
+          - relationships:
+              to: ref('stg_supplier')
+              field: supplier_id
+      - name: line_number
+        tests:
+          - not_null
+      - name: quantity
+        tests:
+          - positive_values
+      - name: extended_price
+        tests:
+          - positive_values
+      - name: discount
+      - name: tax
+      - name: returned
+        tests:
+          - accepted_values:
+              values: ["O", "F"]
+      - name: line_status
+        tests:
+          - accepted_values:
+              values: ["R", "N", "A"]
+      - name: ship_date
+      - name: commit_date
+      - name: receipt_date
+      - name: ship_instructions
+      - name: ship_mode
 
-    - name: lineitem
-      description: "Order line items"
-      columns:
-        - name: order_id
-          tests:
-            - relationships:
-                to: ref('stg_orders')
-                field: id
-        - name: part_id
-          tests:
-            - relationships:
-                to: ref('stg_part')
-                field: id
-        - name: supplier_id
-          tests:
-            - relationships:
-                to: ref('stg_supplier')
-                field: id
-        - name: line_number
-          tests:
-            - not_null
-        - name: quantity
-        - name: extended_price
-        - name: discount
-        - name: tax
-        - name: returned
-          tests:
-            - accepted_values:
-                values: ['O', 'F']
-        - name: returned
-          tests:
-            - accepted_values:
-                values: ['R', 'N', 'A']
+  - name: stg_supplier
+    description: "Every row represents a supplier"
+    columns:
+      - name: supplier_id
+        tests:
+          - unique
+          - not_null
+      - name: country_id
+        tests:
+          - relationships:
+              to: ref('stg_nation')
+              field: country_id
+      - name: phone_number
+      - name: account_balance
 
-    - name: supplier
-      description: "Every row represents a supplier"
-      columns:
-        - name: id
-          tests:
-            - unique
-            - not_null
-        - name: country_id
-          tests:
-            - relationships:
-                to: ref('stg_nation')
-                field: id
-        - name: account_balance
+  - name: stg_part
+    description: "Product parts"
+    columns:
+      - name: part_id
+        tests:
+          - unique
+          - not_null
+      - name: manufacturer
+      - name: brand
+      - name: type
+      - name: size
+      - name: container
+      - name: retail_price
 
-    - name: part
-      description: "Product parts"
-      columns:
-        - name: id
-          tests:
-            - unique
-            - not_null
-        - name: manufacturer
-        - name: brand
+  - name: stg_partsupp
+    description: "Part-Supplier relationship"
+    columns:
+      - name: part_id
+        tests:
+          - relationships:
+              to: ref('stg_part')
+              field: part_id
+      - name: supplier_id
+        tests:
+          - relationships:
+              to: ref('stg_supplier')
+              field: supplier_id
+      - name: available_quantity
+      - name: supply_cost
+
+  - name: stg_nation
+    description: "Countries"
+    columns:
+      - name: country_id
+        tests:
+          - unique
+          - not_null
+      - name: country_name
+        tests:
+          - not_null
+      - name: region_id
+        tests:
+          - relationships:
+              to: ref('stg_region')
+              field: region_id
+
+  - name: stg_region
+    description: "Geographical regions"
+    columns:
+      - name: region_id
+        tests:
+          - unique
+          - not_null
+      - name: region_name
+        tests:
+          - not_null
+
+  - name: int_customer_daily_spend
+    description: "Changes granularity and aggregate data to calculate total spend per customer per day."
+    columns:
+      - name: customer_id
+      - name: sales_date
+      - name: dialy_net_spend
+      - name: daily_gross_spend
+      - name: daily_orders_count
     
-    - name: partsupp
-      description: "Part-Supplier relationship"
-      columns:
-        - name: part_id
-          tests:
-            - relationships:
-                to: ref('stg_part')
-                field: id
-        - name: supplier_id
-          tests:
-            - relationships:
-                to: ref('stg_supplied')
-                field: id
-        
-    - name: nation
-      description: "Countries"
-      columns:
-        - name: id
-          tests:
-            - unique
-            - not_null
-        - name: name
-          tests:
-            - not_null
-        - name: region_id
-          tests:
-            - relationships:
-                to: ref('stg_region')
-                field: id
+  - name: int_order_lineitems
+    description: "Joins ORDERS and LINEITEM information and calculates key metrics at the order line level, such as net price and gross price."
+    columns:
+      - name: order_id
+      - name: customer_id
+      - name: part_id
+      - name: supplier_id
+      - name: line_number
+      - name: order_date
+      - name: order_status
+      - name: order_priority
+      - name: clerk_id
+      - name: ship_priority
+      - name: quantity
+      - name: extended_price
+      - name: discount
+      - name: tax
+      - name: returned
+      - name: status
+      - name: ship_date
+      - name: commit_date
+      - name: receipt_date
+      - name: ship_instructions
+      - name: ship_mode
+      - name: net_price
+      - name: gross_price
+      - name: sales_amount
 
-    - name: region
-      description: "Geographical regions"
-      columns:
-        - name: id
-          tests:
-            - unique
-            - not_null
-        - name: name
-          tests:
-            - not_null
+  - name: int_part_supplier_costs
+    description: "Combines PART and PARTSUPP information so that supply cost data is readily available along with part details."
+    columns:
+      - name: part_id
+      - name: supplier_id
+      - name: manufacturer
+      - name: brand
+      - name: type
+      - name: size
+      - name: container
+      - name: retail_price
+      - name: supplier_available_quantity
+      - name: supplier_cost

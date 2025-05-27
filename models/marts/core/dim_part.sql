@@ -1,5 +1,7 @@
 select
-    id as part_id,
+    part_id,
+    type as part_type,
+    retail_price,
     manufacturer,
     brand
 from

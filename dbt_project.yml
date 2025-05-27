@@ -39,5 +39,10 @@ models:
   dbt_practice:
     staging:
       +materialized: table
+    intermediate:
+      +materialized: table
     marts:
-      +materialized: view
+      core:
+          +materialized: view
+      analysis:
+          +materialized: table

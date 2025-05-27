@@ -1,3 +1,5 @@
+
+
 select
     l_orderkey as order_id,
     l_partkey as part_id,
@@ -9,6 +11,12 @@ select
     l_tax as tax, -- 0.08 for 8% tax
     l_returnflag as returned, -- replace R with 'yes' and N with 'no'
     l_linestatus as status, -- replace O with 'open' and F with 'finalized'
-    l_shipdate as ship_date
+    l_shipdate as ship_date,
+    l_commitdate as commit_date,
+    l_receiptdate as receipt_date,
+    l_shipinstruct as ship_instructions,
+    l_shipmode as ship_mode
+
 from
     {{ source('tpch_sf1', 'lineitem') }}
+
