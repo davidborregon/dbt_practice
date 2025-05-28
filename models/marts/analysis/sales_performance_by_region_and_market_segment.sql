@@ -1,7 +1,3 @@
-/*
-Desglosa el rendimiento de ventas (ingresos y cantidad) por geografía y segmento de mercado del cliente.
-*/
-
 select
     dr.region_name,
     dn.country_name,

@@ -1,7 +1,3 @@
-/*
-Este modelo clasificaría a los clientes en diferentes segmentos según su valor de vida (CLTV).
-El CLTV podría calcularse basándose en el gasto total del cliente a lo largo del tiempo, la frecuencia de sus pedidos, etc.
-*/
 select
     c.customer_id,
     c.customer_name,

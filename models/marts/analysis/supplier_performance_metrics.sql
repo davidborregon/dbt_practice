@@ -1,8 +1,3 @@
-/*
-Evalúa a los proveedores basándose en métricas como el costo total de suministro, la cantidad de partes suministradas,
-la fiabilidad (por ejemplo, porcentaje de artículos devueltos de sus partes), o la puntualidad (diferencia entre L_COMMITDATE y L_RECEIPTDATE).
-*/
-
 select
     s.supplier_id,
     s.supplier_name,

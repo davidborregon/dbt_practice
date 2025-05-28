@@ -220,3 +220,136 @@ models:
       - name: retail_price
       - name: supplier_available_quantity
       - name: supplier_cost
+
+  - name: dim_customer
+    description: "Customer dimension."
+    columns:
+      - name: customer_id
+      - name: customer_name
+      - name: country_id
+      - name: country_name
+      - name: account_balance
+      - name: market_segment
+  
+  - name: dim_nation
+    description: "Nation (country) dimension."
+    columns:
+      - name: country_id
+      - name: country_name
+      - name: region_id
+      - name: region_name
+
+  - name: dim_orders
+    description: "Orders dimension."
+    columns:
+      - name: order_id
+      - name: customer_id
+      - name: order_status
+      - name: total_price
+      - name: order_date
+
+  - name: dim_part
+    description: "Part dimension."
+    columns:
+      - name: part_id
+      - name: type as part_type
+      - name: retail_price
+      - name: manufacturer
+      - name: brand
+
+  - name: dim_partsupp
+    description: "Partsupp dimension."
+    columns:
+      - name: part_id
+      - name: supplier_id
+  
+  - name: dim_region
+    description: "Region dimension."
+    columns:
+      - name: region_id
+      - name: region_name
+
+  - name: dim_supplier
+    description: "Supplier dimension."
+    columns:
+      - name: supplier_id
+      - name: supplier_name
+      - name: country_id
+      - name: country_name
+      - name: account_balance
+
+  - name: fact_lineitems
+    description: "Lineitems fact."
+    columns:
+      - name: order_id
+      - name: customer_id
+      - name: part_id
+      - name: supplier_id
+      - name: line_number
+      - name: order_date
+      - name: quantity
+      - name: extended_price
+      - name: discount
+      - name: tax
+      - name: net_price
+      - name: gross_price
+      - name: sales_amount
+      - name: supplier_name
+
+  - name: customer_lifetime_value_segmentation
+    description: "This model classifies customers into different segments according to their lifetime value (CLTV). The CLTV can be calculated based on the customer's total spending over time, the frequency of their orders, etc."
+    columns:
+      - name: customer_id
+      - name: customer_name
+      - name: market_segment
+      - name: country_name
+      - name: region_name
+      - name: total_lifetime_net_spend
+      - name: total_lifetime_gross_spend
+      - name: total_orders
+      - name: first_order_date
+      - name: last_order_date
+      - name: customer_age_days
+      - name: cltv_segment
+      - name: avg_days_between_orders
+
+  - name: sales_performance_by_region_and_market_segment
+    description: "Breaks down sales performance (sales and quantity) by geography and customer market segment."
+    columns:
+      - name: region_name
+      - name: country_name
+      - name: market_segment
+      - name: order_date as sales_date
+      - name: total_quantity_sold
+      - name: total_net_sales
+      - name: total_gross_sales
+      - name: total_orders_count
+
+  - name: product_profitability_analysis
+    description: "Analyzes the profitability of parts/products based on sales price (net_price from LINEITEM), supply cost (PS_SUPPLYCOST from PARTSUPP), and sales volume."
+    columns:
+      - name: part_id
+      - name: manufacturer
+      - name: brand
+      - name: part_type
+      - name: retail_price
+      - name: total_quantity_sold
+      - name: total_revenue
+      - name: total_cost_of_goods_sold
+      - name: total_profit
+      - name: profit_margin_percentage
+
+  - name: supplier_performance_metrics
+    description: "Evaluates suppliers based on metrics such as total cost of supply, quantity of parts supplied, reliability (e.g., percentage of returned parts), or timeliness (difference between L_COMMITDATE and L_RECEIPTDATE)."
+    columns:
+      - name: supplier_id
+      - name: supplier_name
+      - name: supplier_nation
+      - name: supplier_region
+      - name: total_inventory_cost
+      - name: total_parts_supplied_quantity
+      - name: total_sales_from_supplier
+      - name: total_orders_with_supplier_parts
+      - name: avg_receipt_delay_days
+      - name: avg_shipping_delay_days
+      - name: percentage_returned_items

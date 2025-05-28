@@ -1,8 +1,3 @@
-/*
-Analiza la rentabilidad de las partes/productos basándose en el precio de venta (net_price de LINEITEM),
-el coste de suministro (PS_SUPPLYCOST de PARTSUPP), y el volumen de ventas.
-*/
-
 select
     dp.part_id,
     dp.manufacturer,
