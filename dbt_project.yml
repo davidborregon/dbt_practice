@@ -43,6 +43,6 @@ models:
       +materialized: table
     marts:
       core:
-          +materialized: view
-      analysis:
           +materialized: table
+      analysis:
+          +materialized: view
