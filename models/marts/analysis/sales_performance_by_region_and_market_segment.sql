@@ -1,6 +1,6 @@
 select
-    dr.region_name,
-    dn.country_name,
+    nr.region_name,
+    nr.country_name,
     dc.market_segment,
     oli.order_date as sales_date,  -- Granularidad diaria
     sum(oli.quantity) as total_quantity_sold,
@@ -10,8 +10,7 @@ select
 
 from {{ ref("int_order_lineitems") }} oli
 join {{ ref("dim_customer") }} dc on oli.customer_id = dc.customer_id
-join {{ ref("dim_nation") }} dn on dc.country_id = dn.country_id
-join {{ ref("dim_region") }} dr on dn.region_id = dr.region_id
+join {{ ref("int_nation_region") }} nr on dc.country_id = nr.country_id
 
-group by dr.region_name, dn.country_name, dc.market_segment, oli.order_date
-order by dr.region_name, dn.country_name, dc.market_segment, sales_date
+group by nr.region_name, nr.country_name, dc.market_segment, oli.order_date
+order by nr.region_name, nr.country_name, dc.market_segment, sales_date

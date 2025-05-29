@@ -221,6 +221,14 @@ models:
       - name: supplier_available_quantity
       - name: supplier_cost
 
+  - name: int_nation_region 
+    description: "Combines NATION and REGION information."
+    columns:
+      - name: country_id
+      - name: country_name
+      - name: region_id
+      - name: region_name
+
   - name: dim_customer
     description: "Customer dimension."
     columns:
@@ -230,14 +238,6 @@ models:
       - name: country_name
       - name: account_balance
       - name: market_segment
-  
-  - name: dim_nation
-    description: "Nation (country) dimension."
-    columns:
-      - name: country_id
-      - name: country_name
-      - name: region_id
-      - name: region_name
 
   - name: dim_orders
     description: "Orders dimension."
@@ -262,12 +262,6 @@ models:
     columns:
       - name: part_id
       - name: supplier_id
-  
-  - name: dim_region
-    description: "Region dimension."
-    columns:
-      - name: region_id
-      - name: region_name
 
   - name: dim_supplier
     description: "Supplier dimension."

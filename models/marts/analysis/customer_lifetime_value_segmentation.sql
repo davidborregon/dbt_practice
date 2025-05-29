@@ -2,8 +2,8 @@ select
     c.customer_id,
     c.customer_name,
     c.market_segment,
-    dn.country_name,
-    dr.region_name,
+    nr.country_name,
+    nr.region_name,
     round(sum(oli.net_price), 2) as total_lifetime_net_spend,
     round(sum(oli.gross_price), 2) as total_lifetime_gross_spend,
     count(distinct oli.order_id) as total_orders,
@@ -23,12 +23,11 @@ select
 
 from {{ ref("int_order_lineitems") }} oli
 join {{ ref("dim_customer") }} c on oli.customer_id = c.customer_id
-join {{ ref("dim_nation") }} dn on c.country_id = dn.country_id
-join {{ ref("dim_region") }} dr on dn.region_id = dr.region_id
+join {{ ref("int_nation_region") }} nr on c.country_id = nr.country_id
 
 group by
     c.customer_id,
     c.customer_name,
     c.market_segment,
-    dn.country_name,
-    dr.region_name
+    nr.country_name,
+    nr.region_name
