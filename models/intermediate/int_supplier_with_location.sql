@@ -1,4 +1,5 @@
-with suppliers as (
+with
+suppliers as (
     select
         s.supplier_id,
         s.supplier_name,
@@ -8,12 +9,15 @@ with suppliers as (
 ),
 location as (
     select
-        l.country_id,
-        l.country_name,
-        l.region_id,
-        l.region_name
+        n.country_id,
+        n.country_name,
+        r.region_id,
+        r.region_name
     from
-        {{ ref('dim_location') }} l
+        {{ ref('stg_nation') }} n
+    join
+        {{ ref('stg_region') }} r on n.region_id=r.region_id
+
 )
 
 select
